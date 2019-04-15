@@ -1,0 +1,3 @@
+﻿prefix: "!" # Bot prefix for commands
+tokens:
+    discord: "null" # Use your own personal token from discord dev
