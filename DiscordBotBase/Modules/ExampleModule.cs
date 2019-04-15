@@ -10,7 +10,7 @@ namespace DiscordBotBase.Modules
 {
     public class ExampleModule : ModuleBase<SocketCommandContext>
     {
-        [Command("say"), Alias("s")]
+        [Command("says"), Alias("s")]
         [Summary("Make the bot say something")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public Task Say([Remainder]string text)
