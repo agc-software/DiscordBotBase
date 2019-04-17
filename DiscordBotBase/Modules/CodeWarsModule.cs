@@ -13,11 +13,13 @@ namespace DiscordBotBase.Modules
 {
     public class CodeWarsModule : ModuleBase<SocketCommandContext>
     {
-        private static readonly Utility utility = new Utility();
+        private readonly Utility utility = new Utility();
+        private readonly Uri CodeWarsUri = new Uri("https://www.codewars.com/api/");
+        private readonly string Version = "v1";
 
         [Group("cw"), Name("CodeWars")]
         [RequireContext(ContextType.Guild)]
-        public class CW : ModuleBase
+        public class CodeWars : CodeWarsModule
         {
             [Command("get user"), Alias("gusr")]
             [Summary("Fetches information about a supplied user from codewars")]
@@ -26,23 +28,9 @@ namespace DiscordBotBase.Modules
             {
                 try
                 {
-                    var Skills = string.Empty;
-                    var LanguageRank = string.Empty;
+                    var response = utility.ExecuteRequest(CodeWarsUri, Version, $"/users/{text}", RestSharp.Method.GET);
 
-                    var response = utility.ExecuteRequest($"{text}", "https://www.codewars.com/api/v1/users/", RestSharp.Method.GET);
-
-                    foreach (var item in response.Skills)
-                    {
-                        Skills += $"{item}, ";
-                    }
-
-                    foreach (var item in response.Ranks.Languages)
-                    {
-                        LanguageRank += $"{item.Key} : {item.Value.Name}({item.Value.Score}), ";
-                    }
-
-                    await ReplyAsync($"```Username: {response.Username}{Environment.NewLine}Honor: {response.Honor}{Environment.NewLine}CompletedChallenges: {response.CodeChallenges.TotalCompleted}{Environment.NewLine}" +
-                        $"Skills: {Skills}{Environment.NewLine}LanguageRank: {LanguageRank}```");
+                    await ReplyAsync($"```json{Environment.NewLine}{response}```");
                 }
                 catch
                 {

@@ -1,19 +1,18 @@
 ﻿using RestSharp;
+using System;
+using System.Threading.Tasks;
 
 namespace DiscordBotBase.API
 {
     class Utility
     {
-        public DAL.CodeWarsUser ExecuteRequest(string param, string baseurl, Method method)
+        public string ExecuteRequest(Uri baseUri, string apiVersion, string apiQuery, Method method)
         {
-            var client = new RestClient(baseurl);
-            var theRequest = new RestRequest("{default}", method);
-            theRequest.AddUrlSegment("default", param);
-            var theResponse = client.Execute<DAL.CodeWarsUser>(theRequest);
+            var client = new RestClient(baseUri);
+            var theRequest = new RestRequest(apiVersion + apiQuery, method);
 
-            //var asyncResponse = client.ExecuteAsync(theRequest, theResponse => { theContent = theResponse.Content; });
-
-            return theResponse.Data;
+            IRestResponse response = client.Execute(theRequest);
+            return response.Content;
         }
     }
 }
