@@ -70,7 +70,7 @@ namespace DiscordBotBase.Modules
                 }
             }
 
-            /* TODO: Refactor, create a clean reponse class (parse and output), add webhook, add auth specifically to this bot (register bot account on cw?) */
+            /* TODO: Refactor, create a clean reponse class (parse and output), add webhook, add auth specifically to this bot (register bot account on cw?), Ratelimit */
         }
     }
 }
