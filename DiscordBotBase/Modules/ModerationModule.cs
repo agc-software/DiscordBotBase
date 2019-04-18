@@ -77,7 +77,7 @@ namespace DiscordBotBase.Modules
                 try
                 {
                     user ??= Context.User;
-                    await ReplyAsync($"ID: {user.Id} : {user.Discriminator} Nickname: {user.Username} Created: {user.CreatedAt}");
+                    await ReplyAsync($"```Name: {user.Username}#{user.Discriminator} ID: {user.Id}{Environment.NewLine}Created: {user.CreatedAt}```");
                 }
                 catch
                 {

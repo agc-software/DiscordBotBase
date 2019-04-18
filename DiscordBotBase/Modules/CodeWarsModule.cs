@@ -19,8 +19,8 @@ namespace DiscordBotBase.Modules
         [RequireContext(ContextType.Guild)]
         public class CodeWars : CodeWarsModule
         {
-            [Command("get user"), Alias("gusr")]
-            [Summary("Fetches information about a supplied user from codewars")]
+            [Command("user"), Alias("u")]
+            [Summary("Gets information about a supplied user from codewars")]
             [RequireUserPermission(GuildPermission.SendMessages)]
             public async Task UserValuesAsync([Remainder]string text)
             {
@@ -28,7 +28,7 @@ namespace DiscordBotBase.Modules
                 {
                     var response = utility.ExecuteRequest(CodeWarsUri, Version, $"/users/{text}", RestSharp.Method.GET);
 
-                    await ReplyAsync($"```json{Environment.NewLine}{response.Truncate(1800)}```");
+                    await ReplyAsync($"```json{Environment.NewLine}{response}```");
                 }
                 catch
                 {
@@ -36,8 +36,8 @@ namespace DiscordBotBase.Modules
                 }
             }
 
-            [Command("get challenges"), Alias("gcha")]
-            [Summary("Fetches information about a supplied user's challenges from codewars")]
+            [Command("challenges completed"), Alias("cc")]
+            [Summary("Fetches information about a specified users challenges")]
             [RequireUserPermission(GuildPermission.SendMessages)]
             public async Task ChallengesValuesAsync([Remainder]string text)
             {
@@ -45,7 +45,7 @@ namespace DiscordBotBase.Modules
                 {
                     var response = utility.ExecuteRequest(CodeWarsUri, Version, $"/users/{text}/code-challenges/completed?page=0", RestSharp.Method.GET);
 
-                    await ReplyAsync($"```json{Environment.NewLine}{response.Truncate(1800)}```");
+                    await ReplyAsync($"```json{Environment.NewLine}{response}```");
                 }
                 catch
                 {
@@ -53,8 +53,8 @@ namespace DiscordBotBase.Modules
                 }
             }
 
-            [Command("get challenge"), Alias("gscha")]
-            [Summary("Fetches information about a supplied user's challenges from codewars")]
+            [Command("challenge"), Alias("c")]
+            [Summary("Fetches information about a specified challenge")]
             [RequireUserPermission(GuildPermission.SendMessages)]
             public async Task ChallengeValuesAsync([Remainder]string text)
             {
@@ -62,7 +62,7 @@ namespace DiscordBotBase.Modules
                 {
                     var response = utility.ExecuteRequest(CodeWarsUri, Version, $"/code-challenges/{text}", RestSharp.Method.GET);
 
-                    await ReplyAsync($"```json{Environment.NewLine}{response.Truncate(1800)}```");
+                    await ReplyAsync($"```json{Environment.NewLine}{response}```");
                 }
                 catch
                 {

@@ -1,4 +1,6 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 
 namespace DiscordBotBase.API
@@ -11,13 +13,6 @@ namespace DiscordBotBase.API
             var theRequest = new RestRequest(apiVersion + apiQuery, method);
 
             IRestResponse response = client.Execute(theRequest);
-
-
-            // Whitelist over blacklist
-            if(response.StatusCode != System.Net.HttpStatusCode.OK || response.StatusCode != System.Net.HttpStatusCode.Accepted)
-            {
-                return Convert.ToString(response.StatusCode);
-            }
 
             return response.Content;
         }
