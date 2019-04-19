@@ -3,7 +3,6 @@ using Discord.Commands;
 using System.Threading.Tasks;
 using DiscordBotBase.API;
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 /* Don't use this in production, it's for references only 

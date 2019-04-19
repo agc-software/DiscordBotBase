@@ -26,6 +26,13 @@ namespace DiscordBotBase.Services
             _provider = provider;
 
             _discord.MessageReceived += OnMessageReceivedAsync;
+            _discord.UserJoined += OnUserJoinedAsync;
+        }
+
+        private async Task OnUserJoinedAsync(SocketGuildUser arg)
+        {
+            var currentChannel = arg.Guild.GetChannel(arg.Guild.DefaultChannel.Id) as SocketTextChannel;
+            await currentChannel.SendMessageAsync($"Welcome {arg.Username} to {currentChannel.Guild.Name}");
         }
 
         private async Task OnMessageReceivedAsync(SocketMessage s)
