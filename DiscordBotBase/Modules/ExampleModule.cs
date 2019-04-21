@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace DiscordBotBase.Modules
 {
-    public class ExampleModule : ModuleBase<SocketCommandContext>
+    class ExampleModule : ModuleBase<SocketCommandContext>
     {
-        [Command("says"), Alias("s")]
+        [Command("say"), Alias("s")]
         [Summary("Make the bot say something")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public Task Say([Remainder]string text)
