@@ -93,26 +93,24 @@ namespace DiscordBotBase.Modules
             [Summary("Mutes specified user by adding them to role 'muted'")]
             [RequireUserPermission(GuildPermission.MuteMembers)]
             [RequireBotPermission(GuildPermission.MuteMembers)]
-            public async Task MuteUserAsync(SocketGuildUser user, double timeToMute, [Remainder] string optionalReason = null)
+            public async Task MuteUserAsync(SocketGuildUser user, double timeToMute = 5.0, [Remainder] string optionalReason = null)
             {
                 try
                 {
                     var mutedRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "muted" || x.Name.ToLower() == "mute");
 
                     await user.AddRoleAsync(mutedRole);
-                    await ReplyAsync($"**{user.Username}** you have been muted for {timeToMute} minutes");
-                    //user.SendMessageAsync($"You have been muted from server: {Context.Guild.Name} for {timeToMute} seconds");
+                    await ReplyAsync($"**{user.Username}** has been muted for {timeToMute} minutes");
 
-                    var time = Stopwatch.StartNew();
-                    while (time.ElapsedMilliseconds < timeToMute * 60000)
+                    var stopwatchStart = Stopwatch.StartNew();
+                    while (stopwatchStart.ElapsedMilliseconds < timeToMute * 60000)
                     {
-
-                        if (time.ElapsedMilliseconds >= timeToMute * 60000)
+                        if (stopwatchStart.ElapsedMilliseconds >= timeToMute * 60000)
                             break;
                     }
 
                     await user.RemoveRoleAsync(mutedRole);
-                    await ReplyAsync($"**{user.Username}** you have now been un-muted");
+                    await ReplyAsync($"**{user.Username}** has now been un-muted");
                 }
                 catch
                 {
