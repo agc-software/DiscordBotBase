@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using DiscordBotBase.API;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Discord.WebSocket;
 
@@ -91,12 +93,26 @@ namespace DiscordBotBase.Modules
             [Summary("Mutes specified user by adding them to role 'muted'")]
             [RequireUserPermission(GuildPermission.MuteMembers)]
             [RequireBotPermission(GuildPermission.MuteMembers)]
-            public async Task MuteUserAsync(SocketGuildUser user, [Remainder] string optionalReason = null)
+            public async Task MuteUserAsync(SocketGuildUser user, double timeToMute, [Remainder] string optionalReason = null)
             {
                 try
                 {
                     var mutedRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "muted" || x.Name.ToLower() == "mute");
+
                     await user.AddRoleAsync(mutedRole);
+                    await ReplyAsync($"**{user.Username}** you have been muted for {timeToMute} minutes");
+                    //user.SendMessageAsync($"You have been muted from server: {Context.Guild.Name} for {timeToMute} seconds");
+
+                    var time = Stopwatch.StartNew();
+                    while (time.ElapsedMilliseconds < timeToMute * 60000)
+                    {
+
+                        if (time.ElapsedMilliseconds >= timeToMute * 60000)
+                            break;
+                    }
+
+                    await user.RemoveRoleAsync(mutedRole);
+                    await ReplyAsync($"**{user.Username}** you have now been un-muted");
                 }
                 catch
                 {
