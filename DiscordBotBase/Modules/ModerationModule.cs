@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using DiscordBotBase.API;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using Discord.WebSocket;
 
 /* Don't use this in production, it's for references only 
  Use this as examples: https://github.com/Aux/Discord.Net-Example/tree/2.0/src/Modules */
@@ -76,7 +80,7 @@ namespace DiscordBotBase.Modules
             {
                 try
                 {
-                    user ??= Context.User;
+                    user = Context.User;
                     await ReplyAsync($"```Name: {user.Username}#{user.Discriminator} ID: {user.Id}{Environment.NewLine}Created: {user.CreatedAt}```");
                 }
                 catch
@@ -85,7 +89,36 @@ namespace DiscordBotBase.Modules
                 }
             }
 
-            /* TODO: Refactor, Add mute, etc.. */
+            [Command("mute"), Alias("m")]
+            [Summary("Mutes specified user by adding them to role 'muted'")]
+            [RequireUserPermission(GuildPermission.MuteMembers)]
+            [RequireBotPermission(GuildPermission.MuteMembers)]
+            public async Task MuteUserAsync(SocketGuildUser user, double timeToMute = 5.0, [Remainder] string optionalReason = null)
+            {
+                try
+                {
+                    var mutedRole = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == "muted" || x.Name.ToLower() == "mute");
+
+                    await user.AddRoleAsync(mutedRole);
+                    await ReplyAsync($"**{user.Username}** has been muted for {timeToMute} minutes");
+
+                    var stopwatchStart = Stopwatch.StartNew();
+                    while (stopwatchStart.ElapsedMilliseconds < timeToMute * 60000)
+                    {
+                        if (stopwatchStart.ElapsedMilliseconds >= timeToMute * 60000)
+                            break;
+                    }
+
+                    await user.RemoveRoleAsync(mutedRole);
+                    await ReplyAsync($"**{user.Username}** has now been un-muted");
+                }
+                catch
+                {
+                    await ReplyAsync($"Sorry, I can't let you do that **{Context.User.Username}**");
+                }
+            }
+
+            /* TODO: Refactor, etc.. */
         }
     }
 }
